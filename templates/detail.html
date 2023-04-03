@@ -1,0 +1,11 @@
+{% extends 'index.html' %}
+{% block content %}
+<div><p>singlepost</p>
+{{post.user}} <br>
+<img src="{{post.image.url}}" alt="" width="400"><br>
+<h1> <strong>video</strong> </h1>
+<video width="520" height="340" controls>
+    <source src="{{post.video.url}}" type="video/mp4">
+{{post.caption}}
+</div>
+{% endblock content %}
