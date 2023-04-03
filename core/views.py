@@ -39,3 +39,16 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
     
+def signin(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            error_msg = 'Invalid username or password.'
+    else:
+        error_msg = ''
+    return render(request, 'signin.html', {'error_msg': error_msg})
