@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindscss.com"></script>
     {% block title %}
-      <h1>Blog</h1>
+      <h1>Paranormal Stories!</h1>
     {% endblock title %}
 </head>
 <body>
@@ -14,25 +14,32 @@
 </body>
 
 {% block content %}
-<p>hello</p>
+<p class="py-6">hello to our site</p>
 {% for singlepost in post %}
 {{singlepost.user}}
 <img src="{{singlepost.image.url}}" alt="" width="40">
 <a href="{% url 'detail' singlepost.id %}">click here</a>
   
 {% endfor %}
+<a href="{% url 'signup' %}">Sign up</a><br>
+<a href="">Sign in</a><br>
+
+
+
 
 {% comment %}  
+{% if user.is_authenticated %}
+<a href=".">My Profile!</a><br>
+<a href=".">logout</a>
+{% else %}
+
     
-    {% if user.is_authenticated %}
-    <a href=".">My Profile!{{profile.user.username}}</a><br>
-    <a href=".">logout</a>
-    {% else %}
-    <a href="">Sign up</a><br>
-        <a href="">Sign in</a><br>
-    <a href=""><strong>new post</strong></a>  
-    <div class="'col-span-3">
-    {% endif %}
+<a href=""><strong>new post</strong></a>  
+<div class="'col-span-3">
+{% endif %}
+
+    
+   
         {% for post in posts %}
         <div>
             <a href="{% url 'singlepost' post.id %}">
