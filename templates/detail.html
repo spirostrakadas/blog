@@ -9,4 +9,15 @@
 {{post.caption}}
 {{post.user.username}}
 </div>
+
+{% if request.user.username == post.user %}
+            <div class="mt-6 p-6 bg-white rounded-xl">
+                <p>this is your item!</p>
+                <a href="{% url 'delete' post.id%}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold">delete</a>
+            </div>
+            {% endif %}
+
+
+
+
 {% endblock content %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from.models import Post,Profile
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model, login, authenticate
+from django.contrib.auth import get_user_model, login, authenticate,logout
 from django.contrib import messages
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
@@ -55,6 +55,14 @@ def signin(request):
     return render(request, 'signin.html', {'error_msg': error_msg})
 
 @login_required
+def logout(request):
+    user=get_user_model()
+    user=User.objects.get(pk=request.user.pk)
+    logout(request)
+    return redirect('home')
+    
+
+@login_required
 def newPost(request): #in the template when i build the form i also need method='post' and !!!!enctype="multipart/form-data"!!!
     form=PostForm()
     if request.method == 'POST':
@@ -67,3 +75,12 @@ def newPost(request): #in the template when i build the form i also need method=
     else:
         form = PostForm()
     return render(request, 'create_post.html', {'form': form})
+
+
+
+@login_required
+def delete(request,pk):
+    post=get_object_or_404(Post,id=pk,)
+    post.delete()
+    return redirect('home')
+
