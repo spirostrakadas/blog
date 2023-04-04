@@ -84,3 +84,8 @@ def delete(request,pk):
     post.delete()
     return redirect('home')
 
+def MyProfile(request,pk):
+    user=get_user_model()
+    user=User.objects.get(pk=request.user.pk)
+    profile=Profile.objects.get(user=user)
+    return render(request,'myprofile.html',{'profile':profile})

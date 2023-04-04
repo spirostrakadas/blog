@@ -15,6 +15,12 @@
 
 {% block content %}
 <div>
+{% if user.is_authenticated %}
+<p>hello {{user.username}}</p>
+<a href="{% url 'myprofile' user.id%}">your profile</a>
+{% endif %}
+
+
 <p class="py-6">hello to our site</p>
 {% for singlepost in post %}
 <img src="{{singlepost.image.url}}" alt="" width="40" height="50"><br>

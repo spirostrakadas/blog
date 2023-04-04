@@ -8,6 +8,7 @@ urlpatterns = [
     path('create_post/',views.newPost,name='create_post'),
      path('<str:pk>/delete/',views.delete,name='delete'),
      path('logout/',views.logout ,name='logout'),
+     path('<str:pk>/profile',views.MyProfile,name='myprofile')
 ]
 
 
