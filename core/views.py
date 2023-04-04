@@ -3,7 +3,8 @@ from.models import Post,Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model, login, authenticate
 from django.contrib import messages
-
+from .forms import PostForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 User = get_user_model()
@@ -52,3 +53,17 @@ def signin(request):
     else:
         error_msg = ''
     return render(request, 'signin.html', {'error_msg': error_msg})
+
+@login_required
+def newPost(request): #in the template when i build the form i also need method='post' and !!!!enctype="multipart/form-data"!!!
+    form=PostForm()
+    if request.method == 'POST':
+        form=PostForm(request.POST,request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user=request.user.username
+            post.save()
+            return redirect('home')
+    else:
+        form = PostForm()
+    return render(request, 'create_post.html', {'form': form})

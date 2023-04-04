@@ -17,13 +17,14 @@
 <div>
 <p class="py-6">hello to our site</p>
 {% for singlepost in post %}
-
 <img src="{{singlepost.image.url}}" alt="" width="40" height="50"><br>
 <a href="{% url 'detail' singlepost.id %}">{{singlepost.caption}}</a>
 </div>
 {% endfor %}
+
 <a href="{% url 'signup' %}">Sign up</a><br>
 <a href="{% url 'signin' %}">Sign in</a><br>
+<a href="{% url 'create_post' %}">New post</a>
 
 
 
