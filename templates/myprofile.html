@@ -1,8 +1,19 @@
 {% extends 'index.html' %}
 
 {% block content %}
-{% for field in profile %}
+
 {{profile.user}}
+<p>my posts</p>
+<div class="container">
+{% for post in posts  %}
+<img src="{{post.image.url}}" alt="" width="400" height="500"><br>
+<a href="{% url 'detail' post.id %}">{{post.caption}}</a><br>
+<video width="520" height="340" controls>
+    <source src="{{post.video.url}}" type="video/mp4">
+</div>
+</div>
 {% endfor %}
+
+
 
 {% endblock content %}
