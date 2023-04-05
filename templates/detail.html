@@ -1,6 +1,13 @@
 {% extends 'index.html' %}
 {% block content %}
+<a href="{% url 'home' %} ">back to home page</a>
 <div><p>singlepost</p>
+    {% if request.user.username == post.user %}
+    <div class="mt-6 p-6 bg-white rounded-xl">
+        <p>this is your item!</p>
+        <a href="{% url 'delete' post.id%}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold">delete</a>
+    </div>
+    {% endif %}
 {{post.user}} <br>
 <img src="{{post.image.url}}" alt="" width="400"><br>
 <h1> <strong>video</strong> </h1>
@@ -9,13 +16,22 @@
 {{post.caption}}
 {{post.user.username}}
 </div>
+<div>comment:
+    {% if request.user.username != post.user %}
+<form method='POST'>
+    {% csrf_token %}
+    {{form}}
+    <button type="submit" class="btn btn-primary">comment</button>
+</form>
+</div>
 
-{% if request.user.username == post.user %}
-            <div class="mt-6 p-6 bg-white rounded-xl">
-                <p>this is your item!</p>
-                <a href="{% url 'delete' post.id%}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold">delete</a>
-            </div>
-            {% endif %}
+{% for comment in comments %}
+{{comment.text}}
+{% endfor %}
+
+{% endif %}
+
+
 
 
 

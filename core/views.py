@@ -1,9 +1,9 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from.models import Post,Profile
+from.models import Post,Profile,Comment
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model, login, authenticate,logout
 from django.contrib import messages
-from .forms import PostForm
+from .forms import PostForm,CommentForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -21,7 +21,20 @@ def index(request):
 
 def detail(request,pk):
     post=get_object_or_404(Post,id=pk)
-    return render(request,'detail.html',{'post':post})
+    comments=post.comments.all()                                #related_name=comments   specifies the name of the reverse relation.
+    form=CommentForm()
+    if request.method == 'POST':
+        form=CommentForm(request.POST)
+        if form.is_valid:
+            comment=form.save(commit=False)
+            comment.user=request.user
+            comment.post=post
+            comment.save()
+            return redirect('detail',pk)
+        else:
+            form=CommentForm()   
+
+    return render(request,'detail.html',{'post':post,'comments':comments,'form':form})
 
 def signup(request):
     if request.method == 'POST':
