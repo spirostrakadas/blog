@@ -29,14 +29,15 @@ def detail(request,pk):
         form=CommentForm(request.POST)
         if form.is_valid:
             comment=form.save(commit=False)
-            comment.user=request.user
+            comment.created_by=request.user
             comment.post=post
             comment.save()
             return redirect('detail',pk)
-        else:
-            form=CommentForm()   
+    else:
+        form=CommentForm()
+        message = 'The form is invalid. Please check the data you entered.'    #from django.contrib import messages
 
-    return render(request,'detail.html',{'post':post,'comments':comments,'form':form})
+    return render(request,'detail.html',{'post':post,'comments':comments,'form':form,'message':message})
 
 def signup(request):
     if request.method == 'POST':
@@ -59,7 +60,7 @@ def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password) #first impor from django.contrib.auth authenticate
         if user is not None:
             login(request, user)
             return redirect('home')

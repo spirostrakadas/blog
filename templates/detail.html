@@ -16,20 +16,24 @@
 {{post.caption}}
 {{post.user.username}}
 </div>
-<div>comment:
-    {% if request.user.username != post.user %}
-<form method='POST'>
-    {% csrf_token %}
-    {{form}}
-    <button type="submit" class="btn btn-primary">comment</button>
-</form>
+
+
+<div class="w3-container">
+<p><strong>comments</strong>
+{% for comment in comments %}
+<li>{{comment.text}}</li>
+{% endfor %}
 </div>
 
-{% for comment in comments %}
-{{comment.text}}
-{% endfor %}
-
-{% endif %}
+<div>write a comment:
+    {% if request.user.username != post.user.username %}
+    <form method='POST'>
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="btn btn-primary">write a comment:</button>
+    </form>
+    </div>
+    {% endif %}
 
 
 

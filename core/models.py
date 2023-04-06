@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model 
 import uuid
 from datetime import datetime
+from django.conf import settings 
 
 # Create your models here.]
 User=get_user_model()
@@ -28,7 +29,7 @@ class Post(models.Model):
         return self.user
 
 class Comment(models.Model):
-    created_by=models.ForeignKey(User,on_delete=models.CASCADE)
+    created_by=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE) #setting.auth.user_model so i can easily have acsess to uses.id etc etc
     post=models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
     text=models.TextField(max_length=500)
     created_at=models.DateTimeField(auto_now_add=True)
