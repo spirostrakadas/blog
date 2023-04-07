@@ -1,10 +1,12 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from.models import Post,Profile
+from.models import Post,Profile,Comment
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model, login, authenticate,logout
 from django.contrib import messages
-from .forms import PostForm
+from .forms import PostForm,CommentForm,Profileform
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import auth
+
 
 # Create your views here.
 User = get_user_model()
@@ -21,7 +23,21 @@ def index(request):
 
 def detail(request,pk):
     post=get_object_or_404(Post,id=pk)
-    return render(request,'detail.html',{'post':post})
+    comments=post.comments.all()                                #related_name=comments   specifies the name of the reverse relation.
+    form=CommentForm()
+    if request.method == 'POST':
+        form=CommentForm(request.POST)
+        if form.is_valid:
+            comment=form.save(commit=False)
+            comment.created_by=request.user
+            comment.post=post
+            comment.save()
+            return redirect('detail',pk)
+    else:
+        form=CommentForm()
+        message = 'The form is invalid. Please check the data you entered.'    #from django.contrib import messages
+
+    return render(request,'detail.html',{'post':post,'comments':comments,'form':form,'message':message})
 
 def signup(request):
     if request.method == 'POST':
@@ -31,8 +47,8 @@ def signup(request):
             user.is_active = True
             user.save()
             # create a Profile instance for the new user
-            profile = Profile(user=user)
-            profile.save()
+            profile = Profile.objects.create(user=user) # in settings.py AUTH_USER_MODEL='auth.User'
+            profile.save()                              # need to specify the AUTH_USER_MODEL setting to tell Django which model to use as the user model for authentication.  
             # log the user in
             login(request, user)
             return redirect('home')
@@ -44,7 +60,7 @@ def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password) #first impor from django.contrib.auth authenticate
         if user is not None:
             login(request, user)
             return redirect('home')
@@ -54,12 +70,16 @@ def signin(request):
         error_msg = ''
     return render(request, 'signin.html', {'error_msg': error_msg})
 
-@login_required
-def logout(request):
-    user=get_user_model()
-    user=User.objects.get(pk=request.user.pk)
-    logout(request)
-    return redirect('home')
+@login_required(login_url='signin')
+def log_out(request):
+    auth.logout(request)
+    return redirect('signin')
+
+#def logout(request):
+   # user=get_user_model()
+   # user=User.objects.get(pk=request.user.pk)
+   # logout(request)
+   # return redirect('home')
     
 
 @login_required
@@ -85,11 +105,20 @@ def delete(request,pk):
     return redirect('home')
 
 def MyProfile(request,pk):
-    user=get_user_model()
+    user=get_user_model()                             #define first wich is the user so i can take the profile
     user=User.objects.get(pk=request.user.pk)
     profile=Profile.objects.get(user=user)
     posts = Post.objects.filter(user=user.username)
-
+    
+    if request.method == 'POST':
+        form = Profileform(request.POST, request.FILES, instance=profile)  
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = user
+            profile.save()
+            return redirect('home')
+    else:
+        form = Profileform(instance=profile)
     
 
     return render(request,'myprofile.html',{'profile':profile,'posts': posts})

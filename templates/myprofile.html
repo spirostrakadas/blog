@@ -1,8 +1,16 @@
+
 {% extends 'index.html' %}
 
 {% block content %}
-
+<a href="{% url 'home' %} ">back to home page</a>
 {{profile.user}}
+<form method="POST"  enctype="multipart/form-data"> 
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-primary">upload your profile picture</button>
+</form>
+
+
 <p>my posts</p>
 <div class="container">
 {% for post in posts  %}
