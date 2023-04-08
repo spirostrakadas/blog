@@ -7,7 +7,7 @@ urlpatterns = [
     path('signin/',views.signin,name='signin'),
     path('create_post/',views.newPost,name='create_post'),
      path('<str:pk>/delete/',views.delete,name='delete'),
-     path('logout/',views.logout ,name='logout'),
+     path('logout/',views.log_out ,name='logout'),
      path('<str:pk>/profile',views.MyProfile,name='myprofile')
 ]
 

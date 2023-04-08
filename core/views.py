@@ -14,10 +14,14 @@ User = get_user_model()
 
 
 def index(request):
-    user_object=User.objects.get(username=request.user)
-    user_profile=Profile.objects.get(user=user_object)
-    post=Post.objects.all()
-    return render(request,'index.html',{'post':post,'user_profile':user_profile})
+    if request.user.is_authenticated:
+        user_object=User.objects.get(username=request.user)
+        user_profile=Profile.objects.get(user=user_object)
+        post=Post.objects.all()
+        return render(request,'index.html',{'post':post,'user_profile':user_profile})
+    else:
+        post=Post.objects.all()
+    return render(request,'index.html',{'post':post})
 
 
 
@@ -70,10 +74,13 @@ def signin(request):
         error_msg = ''
     return render(request, 'signin.html', {'error_msg': error_msg})
 
-@login_required(login_url='signin')
+@login_required()
 def log_out(request):
-    auth.logout(request)
-    return redirect('signin')
+    if request.user.is_authenticated:
+        logout(request)
+    else:
+        return redirect('login')
+    return redirect('home')
 
 #def logout(request):
    # user=get_user_model()
@@ -120,5 +127,5 @@ def MyProfile(request,pk):
     else:
         form = Profileform(instance=profile)
     
-
+    
     return render(request,'myprofile.html',{'profile':profile,'posts': posts,"form":form})
