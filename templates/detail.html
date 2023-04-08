@@ -18,12 +18,12 @@
 </div>
 
 
-<div class="w3-container" rounded-xl>
+<div class="w3-container" w3-teal>
 <p><strong>comments</strong>
 {% for comment in comments %}
 <li>{{comment.text}}</li>
 {% endfor %}
-</div>
+</div><br>
 
 <div>write a comment:
     {% if request.user.username != post.user.username %}

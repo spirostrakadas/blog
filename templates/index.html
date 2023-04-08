@@ -17,20 +17,21 @@
 <div>
 {% if user.is_authenticated %}
 <p>hello {{user.username}}</p>
-<a href="{% url 'myprofile' user.id%}">your profile</a>
+<a href="{% url 'myprofile' user.id%}"><strong>your profile</strong> </a>
 {% endif %}
 
 
-<p class="py-6">hello to our site</p>
+<p class="py-6">feed</p>
 {% for singlepost in post %}
 <img src="{{singlepost.image.url}}" alt="" width="40" height="50"><br>
 <a href="{% url 'detail' singlepost.id %}">{{singlepost.caption}}</a>
 </div>
-{% endfor %}
+{% endfor %} <br>
 
+<br>
 <a href="{% url 'signup' %}">Sign up</a><br>
 <a href="{% url 'signin' %}">Sign in</a><br>
-<a href="{% url 'create_post' %}">New post</a>
+<a href="{% url 'create_post' %}">New post</a><br>
 <a href="{% url 'logout' %}">log out</a>
 
 

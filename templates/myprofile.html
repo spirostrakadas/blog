@@ -2,12 +2,18 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<div>
+
+<img src="{{user.profile_image.url}}" alt="" width="400" height="500">
+
+
+</div>
 <a href="{% url 'home' %} ">back to home page</a>
 {{profile.user}}
 <form method="POST"  enctype="multipart/form-data"> 
     {% csrf_token %}
     {{form.as_p}}
-    <button type="submit" class="btn btn-primary">upload your profile picture</button>
+    <button type="submit" class="btn btn-primary">Upload your profile picture</button>
 </form>
 
 

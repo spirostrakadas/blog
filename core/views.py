@@ -121,4 +121,4 @@ def MyProfile(request,pk):
         form = Profileform(instance=profile)
     
 
-    return render(request,'myprofile.html',{'profile':profile,'posts': posts})
+    return render(request,'myprofile.html',{'profile':profile,'posts': posts,"form":form})
