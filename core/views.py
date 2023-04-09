@@ -24,7 +24,6 @@ def index(request):
     return render(request,'index.html',{'post':post})
 
 
-
 def detail(request,pk):
     post=get_object_or_404(Post,id=pk)
     comments=post.comments.all()                                #related_name=comments   specifies the name of the reverse relation.
